@@ -1,0 +1,17 @@
+{
+    "configurations": [
+    {
+        "name": "ts-node",
+        "type": "ts-node",
+        "request": "launch",
+        "args": [
+            "${relativeFile}"
+        ],
+        "cwd": "${workspaceRoot}",
+        "protocol": "inspector",
+        "internalConsoleOptions": "openOnSessionStart"
+    }
+        
+
+    ]
+}

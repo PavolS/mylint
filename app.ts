@@ -1,7 +1,7 @@
 #!/usr/bin/env ts-node
 /* eslint-disable camelcase */
 
-import { command, restPositionals, run, binary } from 'cmd-ts'
+import { command, restPositionals, flag, run, binary, boolean } from 'cmd-ts'
 import { File } from 'cmd-ts/dist/cjs/batteries/fs'
 import fs from 'fs'
 import { cpus } from 'os'
@@ -12,9 +12,9 @@ const n_cpus = cpus().length
 console.log(n_cpus)
 
 const randomSleeper = new Transform({
-  async transform (chunk, encoding, callback) {
+  transform (chunk, encoding, callback) {
     // await setTimeout(() => {}, 5)
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 100))
+    // await new Promise(resolve => setTimeout(resolve, Math.random() * 100))
     callback(null, chunk)
   }
 })
@@ -22,12 +22,16 @@ const randomSleeper = new Transform({
 const cat = command({
   name: 'mylint',
   args: {
-    paths: restPositionals({ type: File })
+    paths: restPositionals({ type: File }),
+    sleeper: flag({ type: boolean, long: 'sleeper', short: 's' })
   },
-  async handler ({ paths }) {
+  async handler ({ paths, sleeper }) {
     for (const path of paths) {
-      //      fs.createReadStream(path, { highWaterMark: 16 }).pipe(randomSleeper).pipe(process.stdout)
-      fs.createReadStream(path, { highWaterMark: 16 }).pipe(process.stdout)
+      if (sleeper) {
+        fs.createReadStream(path, { highWaterMark: 3 }).pipe(randomSleeper).pipe(process.stdout)
+      } else {
+        fs.createReadStream(path, { highWaterMark: 3 }).pipe(process.stdout)
+      }
     }
   }
 })
