@@ -15,7 +15,7 @@ let randomSleeper = new Transform({
   transform (chunk, encoding, callback) {
     // await setTimeout(() => {}, 5)
     // await new Promise(resolve => setTimeout(resolve, Math.random() * 100))
-    //console.log("--- ", chunk)
+    // console.log("--- ", chunk)
     if (Math.random() < 0.5) {
       callback(null, chunk)
     } else { callback(null, '') }
@@ -35,7 +35,7 @@ const cat = command({
         if (new_sleeper) {
           randomSleeper = new Transform({
             async transform (chunk, encoding, callback) {
-              await new Promise(resolve => setTimeout(resolve, Math.random() * 100))
+              await new Promise(resolve => setTimeout(resolve, Math.random() * 1000))
               callback(null, chunk)
             }
           })
