@@ -15,7 +15,10 @@ const randomSleeper = new Transform({
   transform (chunk, encoding, callback) {
     // await setTimeout(() => {}, 5)
     // await new Promise(resolve => setTimeout(resolve, Math.random() * 100))
-    callback(null, chunk)
+    //console.log("--- ", chunk)
+    if (Math.random() < 0.5) {
+      callback(null, chunk)
+    } else { callback(null, '') }
   }
 })
 
@@ -28,9 +31,9 @@ const cat = command({
   async handler ({ paths, sleeper }) {
     for (const path of paths) {
       if (sleeper) {
-        fs.createReadStream(path, { highWaterMark: 3 }).pipe(randomSleeper).pipe(process.stdout)
+        fs.createReadStream(path, { highWaterMark: 4 }).pipe(randomSleeper).pipe(process.stdout)
       } else {
-        fs.createReadStream(path, { highWaterMark: 3 }).pipe(process.stdout)
+        fs.createReadStream(path, { highWaterMark: 4 }).pipe(process.stdout)
       }
     }
   }
